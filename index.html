@@ -45,6 +45,7 @@
         .iframe-content iframe {
             border: none;
             width: 100%;
+            flex: 1;
         }
 
         .description {
@@ -60,6 +61,12 @@
             margin-top: 0;
             margin-bottom: 10px;
         }
+
+        /* Add style for iframe wrapper */
+        .iframe-wrapper {
+            flex: 1;
+            display: flex;
+        }
     </style>
 </head>
 
@@ -69,32 +76,36 @@
     <!-- Donation Iframe Modal -->
     <div class="iframe-modal" id="iframe-modal">
         <div class="iframe-content">
-            <div class="description">
-                <h3><strong>What do we do?</strong></h3>
-                <p>The Contentment Foundation offers child and adult-centered wellbeing curricula to schools
-                    internationally. Our team is here for you throughout the entire process, helping ensure
-                    that everyone in your school fully benefits from the practices. We also help schools
-                    track, measure, and improve their physical, psychological, and emotional wellbeing using
-                    science-based measurement tools.</p>
-                <p>Our foundational learning platform, The Four Pillars of Wellbeing, is available as a
-                    whole-school transformation for teachers and students everywhere. We partner with
-                    researchers at some of the top universities in the world to study the impact of our
-                    work. We also publish original research and popular articles on the cross-cultural
-                    wellbeing philosophies that unite humanity.</p>
-                <h3><strong>Why are we here?</strong></h3>
-                <p>The Contentment Foundation believes in a world where happiness is cultivated from the
-                    inside-out. We encourage people of all ages and backgrounds to simply draw their
-                    attention inside and discover for themselves the unconditional wellness that has been
-                    there all along.</p>
-                <p>In the end, we’re simply translators who take the best of our human philosophical legacy
-                    and interpret it for the modern mind. We make the most basic practices accessible to
-                    everyone.</p>
-                <p>We are an impact-driven organization that thrives on creating meaningful change in the
-                    world. This is why we focus more heavily on children and their teachers – they are truly
-                    the future of our world.</p>
+            <div class="iframe-wrapper">
+                <div class="description">
+                    <h3><strong>What do we do?</strong></h3>
+                    <p>The Contentment Foundation offers child and adult-centered wellbeing curricula to schools
+                        internationally. Our team is here for you throughout the entire process, helping ensure
+                        that everyone in your school fully benefits from the practices. We also help schools
+                        track, measure, and improve their physical, psychological, and emotional wellbeing using
+                        science-based measurement tools.</p>
+                    <p>Our foundational learning platform, The Four Pillars of Wellbeing, is available as a
+                        whole-school transformation for teachers and students everywhere. We partner with
+                        researchers at some of the top universities in the world to study the impact of our
+                        work. We also publish original research and popular articles on the cross-cultural
+                        wellbeing philosophies that unite humanity.</p>
+                    <h3><strong>Why are we here?</strong></h3>
+                    <p>The Contentment Foundation believes in a world where happiness is cultivated from the
+                        inside-out. We encourage people of all ages and backgrounds to simply draw their
+                        attention inside and discover for themselves the unconditional wellness that has been
+                        there all along.</p>
+                    <p>In the end, we’re simply translators who take the best of our human philosophical legacy
+                        and interpret it for the modern mind. We make the most basic practices accessible to
+                        everyone.</p>
+                    <p>We are an impact-driven organization that thrives on creating meaningful change in the
+                        world. This is why we focus more heavily on children and their teachers – they are truly
+                        the future of our world.</p>
+                </div>
             </div>
             <span class="iframe-close-button" id="close-iframe-modal">&times;</span>
-            <iframe id="donation-iframe"></iframe>
+            <div class="iframe-wrapper">
+                <iframe id="donation-iframe"></iframe>
+            </div>
         </div>
     </div>
 
