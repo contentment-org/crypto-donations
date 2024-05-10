@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo Page</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=3/donation.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=4/donation.css">
     <style>
         .iframe-modal {
             display: none;
@@ -22,7 +22,6 @@
         .iframe-content {
             display: flex;
             background-color: white;
-            max-width: 800px;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -45,27 +44,6 @@
         .iframe-content iframe {
             border: none;
             width: 100%;
-            flex: 1;
-        }
-
-        .description {
-            margin: 0 20px 0 10px;
-        }
-
-        .content-description p {
-            margin: 0;
-        }
-
-        .content-description h3 {
-            font-weight: 700;
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-
-        /* Add style for iframe wrapper */
-        .iframe-wrapper {
-            flex: 1;
-            display: flex;
         }
     </style>
 </head>
@@ -76,41 +54,13 @@
     <!-- Donation Iframe Modal -->
     <div class="iframe-modal" id="iframe-modal">
         <div class="iframe-content">
-            <div class="iframe-wrapper">
-                <div class="description">
-                    <h3><strong>What do we do?</strong></h3>
-                    <p>The Contentment Foundation offers child and adult-centered wellbeing curricula to schools
-                        internationally. Our team is here for you throughout the entire process, helping ensure
-                        that everyone in your school fully benefits from the practices. We also help schools
-                        track, measure, and improve their physical, psychological, and emotional wellbeing using
-                        science-based measurement tools.</p>
-                    <p>Our foundational learning platform, The Four Pillars of Wellbeing, is available as a
-                        whole-school transformation for teachers and students everywhere. We partner with
-                        researchers at some of the top universities in the world to study the impact of our
-                        work. We also publish original research and popular articles on the cross-cultural
-                        wellbeing philosophies that unite humanity.</p>
-                    <h3><strong>Why are we here?</strong></h3>
-                    <p>The Contentment Foundation believes in a world where happiness is cultivated from the
-                        inside-out. We encourage people of all ages and backgrounds to simply draw their
-                        attention inside and discover for themselves the unconditional wellness that has been
-                        there all along.</p>
-                    <p>In the end, we’re simply translators who take the best of our human philosophical legacy
-                        and interpret it for the modern mind. We make the most basic practices accessible to
-                        everyone.</p>
-                    <p>We are an impact-driven organization that thrives on creating meaningful change in the
-                        world. This is why we focus more heavily on children and their teachers – they are truly
-                        the future of our world.</p>
-                </div>
-            </div>
             <span class="iframe-close-button" id="close-iframe-modal">&times;</span>
             <iframe id="donation-iframe"></iframe>
-            <!-- <div class="iframe-wrapper">
-            </div> -->
         </div>
     </div>
 
     <script>
-        const donationHTMLUrl = "https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=3/donation.html";
+        const donationHTMLUrl = "https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=4/donation.html";
         const iframeModal = document.getElementById("iframe-modal");
         const donationIframe = document.getElementById("donation-iframe");
         const openDonationIframeButton = document.getElementById("open-donation-iframe");
@@ -120,9 +70,7 @@
             try {
                 const response = await fetch(donationHTMLUrl);
                 const donationHTML = await response.text();
-                const description = document.querySelector(".description").innerHTML;
-                const htmlWithDescription = donationHTML.replace('<!-- REPLACE_ME -->', description);
-                donationIframe.srcdoc = htmlWithDescription;
+                donationIframe.srcdoc = donationHTML;
                 iframeModal.style.display = "flex";
             } catch (error) {
                 donationIframe.srcdoc = "<p>Failed to load the donation form. Please try again later.</p>";
