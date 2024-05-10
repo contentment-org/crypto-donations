@@ -49,7 +49,7 @@ body {
 .donate-button {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #28a745;
+  background-color: #61bdcc;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -57,7 +57,7 @@ body {
 }
 
 .donate-button:hover {
-  background-color: #218838;
+  background-color: #3ca8b9;
 }
 
 body.iframe-body {
@@ -105,14 +105,14 @@ button {
 
 button {
   margin-top: 20px;
-  background-color: #28a745;
+  background-color: #54bf97;
   color: #fff;
   cursor: pointer;
   border: none;
 }
 
 button:hover {
-  background-color: #218838;
+  background-color: #42b389;
 }
 
 .erc20-field {
