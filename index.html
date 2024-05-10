@@ -6,19 +6,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Another Page</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@main/donation.css">
+    <style>
+        .iframe-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .iframe-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .iframe-close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .iframe-close-button:hover {
+            color: #000;
+        }
+
+        .iframe-content iframe {
+            border: none;
+            width: 100%;
+            height: 500px;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Welcome to Our Donation Page</h1>
     <button id="open-donation-iframe" class="donate-button">Donate Crypto</button>
 
-    <!-- Donation Iframe -->
-    <iframe id="donation-iframe" style="display:none;border:none;width:100%;height:500px;"></iframe>
+    <!-- Donation Iframe Modal -->
+    <div class="iframe-modal" id="iframe-modal">
+        <div class="iframe-content">
+            <span class="iframe-close-button" id="close-iframe-modal">&times;</span>
+            <iframe id="donation-iframe"></iframe>
+        </div>
+    </div>
 
     <script>
         const donationHTMLUrl = "https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@main/donation.html";
+        const iframeModal = document.getElementById("iframe-modal");
         const donationIframe = document.getElementById("donation-iframe");
         const openDonationIframeButton = document.getElementById("open-donation-iframe");
+        const closeIframeModalButton = document.getElementById("close-iframe-modal");
 
         async function loadDonationIframe() {
             try {
@@ -27,7 +76,7 @@
 
                 // Set the fetched content into the iframe's srcdoc attribute
                 donationIframe.srcdoc = donationHTML;
-                donationIframe.style.display = "block";
+                iframeModal.style.display = "flex";
             } catch (error) {
                 donationIframe.srcdoc = "<p>Failed to load the donation form. Please try again later.</p>";
                 console.error("Error loading donation form:", error);
@@ -35,6 +84,18 @@
         }
 
         openDonationIframeButton.addEventListener("click", loadDonationIframe);
+
+        // Close the iframe modal
+        closeIframeModalButton.addEventListener("click", () => {
+            iframeModal.style.display = "none";
+        });
+
+        // Close the iframe modal when clicking outside of the modal content
+        window.addEventListener("click", (event) => {
+            if (event.target === iframeModal) {
+                iframeModal.style.display = "none";
+            }
+        });
     </script>
 </body>
 
