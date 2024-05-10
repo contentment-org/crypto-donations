@@ -1,15 +1,22 @@
 (function () {
-  // Function to inject external CSS file
-  function loadExternalCSS(url) {
+  // Function to inject external files
+  function loadExternalFiles(cssUrl, web3JsUrl) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.type = "text/css";
-    link.href = url;
+    link.href = cssUrl;
     document.head.appendChild(link);
+    // Load Web3.js dynamically
+    const web3Script = document.createElement("script");
+    web3Script.src = web3JsUrl;
+    document.head.appendChild(web3Script);
   }
 
   // Load external CSS for the modal and donation form
-  loadExternalCSS("donation.css");
+  loadExternalFiles(
+    "donation.css",
+    "https://cdn.jsdelivr.net/npm/web3@1.2.2/dist/web3.min.js"
+  );
 
   document.addEventListener("DOMContentLoaded", () => {
     // Donation iframe modal structure
@@ -69,6 +76,34 @@
       ) {
         donationIframe.style.height = event.data.height + "px";
         donationIframe.style.width = event.data.width + "px";
+      }
+    });
+
+    window.addEventListener("load", function () {
+      if (window.ethereum) {
+        window.web3 = new Web3(window.ethereum);
+        window.ethereum
+          .request({ method: "eth_requestAccounts" })
+          .then(() => {
+            console.log("Ethereum enabled");
+
+            web3.eth.getAccounts(function (err, acc) {
+              if (err != null) {
+                self.setStatus("There was an error fetching your accounts");
+                return;
+              }
+              if (acc.length > 0) {
+                console.log(acc);
+              }
+            });
+          })
+          .catch(() => {
+            console.warn("User didn't allow access to accounts.");
+          });
+      } else {
+        console.log(
+          "Non-Ethereum browser detected. You should consider installing MetaMask."
+        );
       }
     });
   });
