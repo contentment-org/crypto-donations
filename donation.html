@@ -6,16 +6,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto Donation Form</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=1/donation.css">
+    <link rel="stylesheet" href="donation.css">
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
 </head>
 
 <body>
-    <!-- Donation Modal -->
-    <div class="donation-modal" id="donation-modal" style="display: flex;">
+    <div class="donation-modal" id="donation-modal">
         <div class="donation-content">
+            <span class="close-button" id="close-donation-form">&times;</span>
             <div class="donation-container">
-                <h1>Donate Crypto</h1>
+                <h1>Donate with Crypto</h1>
                 <form id="donation-form">
                     <label for="donation-type">Donation Type:</label>
                     <select id="donation-type" name="donation-type">
@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=1/donation.js"></script>
+    <script src="donation.js"></script>
 </body>
 
 </html>
