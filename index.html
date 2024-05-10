@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo Page</title>
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=5/donation.css"> -->
     <link rel="stylesheet" href="donation.css">
     <style>
         .iframe-modal {
@@ -78,7 +77,6 @@
     </div>
 
     <script>
-        // const donationHTMLUrl = "https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=5/donation.html";
         const donationHTMLUrl = "donation.html";
         const iframeModal = document.getElementById("iframe-modal");
         const donationIframe = document.getElementById("donation-iframe");
@@ -106,7 +104,8 @@
 
         // Adjust iframe dimensions dynamically using postMessage
         window.addEventListener("message", (event) => {
-            if (event.data && event.data.type === "donation-iframe-dimensions") {
+            if (iframeModal.style.display === "flex" && event.data
+                && event.data.type === "donation-iframe-dimensions") {
                 donationIframe.style.height = event.data.height + "px";
                 donationIframe.style.width = event.data.width + "px";
             }
