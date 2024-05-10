@@ -106,7 +106,7 @@
 
         // Adjust iframe dimensions dynamically using postMessage
         window.addEventListener("message", (event) => {
-            if (event.data && event.data.type === "donation-iframe-height") {
+            if (event.data && event.data.type === "donation-iframe-dimensions") {
                 donationIframe.style.height = event.data.height + "px";
                 donationIframe.style.width = event.data.width + "px";
             }

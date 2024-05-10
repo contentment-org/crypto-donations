@@ -373,7 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateIframeHeight = () => {
     window.parent.postMessage(
       {
-        type: "donation-iframe-height",
+        type: "donation-iframe-dimensions",
         height: document.body.offsetHeight,
         width: document.body.offsetWidth,
       },
