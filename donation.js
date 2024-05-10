@@ -1,5 +1,3 @@
-// donation.js
-
 document.addEventListener("DOMContentLoaded", () => {
   /* Donation contract ABI JSON array */
   const DonationABI = [
@@ -249,9 +247,6 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   ];
 
-  /* Donation contract address */
-  const DonationAddress = "0xbA77E08c914df0CBA67eB0A7D96F82B1E4ae71aF";
-
   /* ERC20 token contract ABI JSON array */
   const ERC20ABI = [
     {
@@ -305,6 +300,9 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   ];
 
+  /* Donation contract address */
+  const DonationAddress = "0xbA77E08c914df0CBA67eB0A7D96F82B1E4ae71aF";
+
   const donationForm = document.getElementById("donation-form");
   const donationTypeSelect = document.getElementById("donation-type");
   const erc20Fields = document.querySelectorAll(".erc20-field");
@@ -316,12 +314,13 @@ document.addEventListener("DOMContentLoaded", () => {
     erc20Fields.forEach((field) => {
       field.style.display = donationType === "ERC20" ? "block" : "none";
     });
+    updateIframeDimensions(); // Adjust the height when fields change visibility
   });
 
-  // Handle form submission
   donationForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     donationStatus.textContent = "Processing...";
+    updateIframeDimensions(); // Adjust the height after status text changes
 
     const donationType = donationTypeSelect.value;
     const email = document.getElementById("donor-email").value;
@@ -344,18 +343,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       if (donationType === "ETH") {
-        // Donate with ETH
         const donationValue = web3.utils.toWei(amount.toString(), "ether");
         await donationContract.methods
           .donateETH(email, signature)
           .send({ from: account, value: donationValue });
       } else if (donationType === "ERC20") {
-        // Donate with ERC20
         const tokenAddress = document.getElementById("token-address").value;
         const erc20Token = new web3.eth.Contract(ERC20ABI, tokenAddress);
         const donationValue = web3.utils.toWei(amount.toString(), "ether");
 
-        // Approve and then donate
         await erc20Token.methods
           .approve(DonationAddress, donationValue)
           .send({ from: account });
@@ -367,6 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       donationStatus.textContent = `Donation failed: ${error.message}`;
     }
+    updateIframeDimensions(); // Adjust the height after status message changes
   });
 
   // Send the height of the donation container to the parent window
@@ -375,7 +372,7 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         type: "donation-iframe-dimensions",
         height: document.body.offsetHeight,
-        width: document.body.offsetWidth + 1,
+        width: document.body.offsetWidth,
       },
       "*"
     );
@@ -383,6 +380,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Observe changes in the donation container using ResizeObserver
   const donationContainer = document.querySelector(".donation-container");
-  const observer = new ResizeObserver(updateIframeDimensions);
-  observer.observe(donationContainer);
+  if (donationContainer) {
+    const observer = new ResizeObserver(updateIframeDimensions);
+    observer.observe(donationContainer);
+  }
 });
