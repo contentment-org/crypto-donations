@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Donations</title>
+    <title>Donate Crypto</title>
     <style>
         .donation-modal {
             display: none;
@@ -31,11 +31,25 @@
             font-size: 20px;
             cursor: pointer;
         }
+
+        .donate-button {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .donate-button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 
 <body>
-    <button id="open-donation-form">Donate Crypto</button>
+    <button id="open-donation-form" class="donate-button">Donate Crypto</button>
 
     <!-- Donation Modal -->
     <div class="donation-modal" id="donation-modal">
@@ -71,12 +85,12 @@
             // Load Donation CSS
             const donationCSS = document.createElement("link");
             donationCSS.rel = "stylesheet";
-            donationCSS.href = "https://cdn.jsdelivr.net/gh/yourusername/yourrepository/donation.css";
+            donationCSS.href = "https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@main/donation.css";
             document.head.appendChild(donationCSS);
 
             // Load Donation JS
             const donationScript = document.createElement("script");
-            donationScript.src = "https://cdn.jsdelivr.net/gh/yourusername/yourrepository/donation.js";
+            donationScript.src = "https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@main/donation.js";
             document.body.appendChild(donationScript);
 
             // Re-bind the close button functionality
