@@ -371,8 +371,8 @@ document.addEventListener("DOMContentLoaded", () => {
     window.parent.postMessage(
       {
         type: "donation-iframe-dimensions",
-        height: document.body.offsetHeight + 1,
-        width: document.body.offsetWidth + 1,
+        height: document.body.offsetHeight,
+        width: document.body.offsetWidth,
       },
       "*"
     );
