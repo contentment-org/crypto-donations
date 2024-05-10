@@ -305,26 +305,10 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   ];
 
-  const donationModal = document.getElementById("donation-modal");
-  const closeDonationButton = document.getElementById("close-donation-form");
   const donationForm = document.getElementById("donation-form");
   const donationTypeSelect = document.getElementById("donation-type");
   const erc20Fields = document.querySelectorAll(".erc20-field");
   const donationStatus = document.getElementById("donation-status");
-
-  // Close modal on button click
-  closeDonationButton.addEventListener("click", () => {
-    donationModal.style.display = "none";
-    donationStatus.textContent = ""; // Clear status
-  });
-
-  // Close modal when clicking outside of it
-  window.addEventListener("click", (event) => {
-    if (event.target === donationModal) {
-      donationModal.style.display = "none";
-      donationStatus.textContent = ""; // Clear status
-    }
-  });
 
   // Show/hide ERC20 fields based on the selected donation type
   donationTypeSelect.addEventListener("change", () => {

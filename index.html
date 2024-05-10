@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo Page</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=4/donation.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=5/donation.css">
     <style>
         .iframe-modal {
             display: none;
@@ -22,10 +22,14 @@
         .iframe-content {
             display: flex;
             background-color: white;
-            padding: 20px;
+            padding: 0;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
+            width: 80%;
+            max-width: 600px;
+            height: 80%;
+            flex-direction: column;
         }
 
         .iframe-close-button {
@@ -44,6 +48,22 @@
         .iframe-content iframe {
             border: none;
             width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .donate-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .donate-button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
@@ -55,12 +75,12 @@
     <div class="iframe-modal" id="iframe-modal">
         <div class="iframe-content">
             <span class="iframe-close-button" id="close-iframe-modal">&times;</span>
-            <iframe id="donation-iframe"></iframe>
+            <iframe id="donation-iframe" sandbox="allow-scripts allow-forms"></iframe>
         </div>
     </div>
 
     <script>
-        const donationHTMLUrl = "https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=4/donation.html";
+        const donationHTMLUrl = "https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@nocache=5/donation.html";
         const iframeModal = document.getElementById("iframe-modal");
         const donationIframe = document.getElementById("donation-iframe");
         const openDonationIframeButton = document.getElementById("open-donation-iframe");
@@ -83,11 +103,6 @@
         // Close the iframe modal
         closeIframeModalButton.addEventListener("click", () => {
             iframeModal.style.display = "none";
-        });
-
-        // Adjust iframe height after it loads
-        donationIframe.addEventListener("load", () => {
-            donationIframe.style.height = donationIframe.contentWindow.document.body.scrollHeight + "px";
         });
     </script>
 </body>
