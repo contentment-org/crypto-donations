@@ -368,4 +368,24 @@ document.addEventListener("DOMContentLoaded", () => {
       donationStatus.textContent = `Donation failed: ${error.message}`;
     }
   });
+
+  // Send the height of the donation container to the parent window
+  const updateIframeHeight = () => {
+    window.parent.postMessage(
+      {
+        type: "donation-iframe-height",
+        height: document.body.offsetHeight,
+        width: document.body.offsetWidth,
+      },
+      "*"
+    );
+  };
+
+  // Run the function once initially
+  updateIframeHeight();
+
+  // Observe changes in the donation container
+  const donationContainer = document.querySelector(".donation-container");
+  const observer = new MutationObserver(updateIframeHeight);
+  observer.observe(donationContainer, { childList: true, subtree: true });
 });
