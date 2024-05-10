@@ -375,14 +375,11 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         type: "donation-iframe-dimensions",
         height: document.body.offsetHeight,
-        width: document.body.offsetWidth,
+        width: document.body.offsetWidth + 1,
       },
       "*"
     );
   };
-
-  // Run the function once initially
-  updateIframeDimensions();
 
   // Observe changes in the donation container using ResizeObserver
   const donationContainer = document.querySelector(".donation-container");
