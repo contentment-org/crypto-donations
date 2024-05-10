@@ -370,7 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Send the height of the donation container to the parent window
-  const updateIframeHeight = () => {
+  const updateIframeDimensions = () => {
     window.parent.postMessage(
       {
         type: "donation-iframe-dimensions",
@@ -382,10 +382,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Run the function once initially
-  updateIframeHeight();
+  updateIframeDimensions();
 
-  // Observe changes in the donation container
+  // Observe changes in the donation container using ResizeObserver
   const donationContainer = document.querySelector(".donation-container");
-  const observer = new MutationObserver(updateIframeHeight);
-  observer.observe(donationContainer, { childList: true, subtree: true });
+  const observer = new ResizeObserver(updateIframeDimensions);
+  observer.observe(donationContainer);
 });
