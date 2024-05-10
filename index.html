@@ -20,11 +20,11 @@
         }
 
         .iframe-content {
+            display: flex;
             background-color: white;
+            max-width: 800px;
             padding: 20px;
             border-radius: 10px;
-            width: 80%;
-            max-width: 800px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
         }
@@ -45,7 +45,20 @@
         .iframe-content iframe {
             border: none;
             width: 100%;
-            height: 500px;
+        }
+
+        .description {
+            margin: 0 20px 0 10px;
+        }
+
+        .content-description p {
+            margin: 0;
+        }
+
+        .content-description h3 {
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -56,6 +69,30 @@
     <!-- Donation Iframe Modal -->
     <div class="iframe-modal" id="iframe-modal">
         <div class="iframe-content">
+            <div class="description">
+                <h3><strong>What do we do?</strong></h3>
+                <p>The Contentment Foundation offers child and adult-centered wellbeing curricula to schools
+                    internationally. Our team is here for you throughout the entire process, helping ensure
+                    that everyone in your school fully benefits from the practices. We also help schools
+                    track, measure, and improve their physical, psychological, and emotional wellbeing using
+                    science-based measurement tools.</p>
+                <p>Our foundational learning platform, The Four Pillars of Wellbeing, is available as a
+                    whole-school transformation for teachers and students everywhere. We partner with
+                    researchers at some of the top universities in the world to study the impact of our
+                    work. We also publish original research and popular articles on the cross-cultural
+                    wellbeing philosophies that unite humanity.</p>
+                <h3><strong>Why are we here?</strong></h3>
+                <p>The Contentment Foundation believes in a world where happiness is cultivated from the
+                    inside-out. We encourage people of all ages and backgrounds to simply draw their
+                    attention inside and discover for themselves the unconditional wellness that has been
+                    there all along.</p>
+                <p>In the end, we’re simply translators who take the best of our human philosophical legacy
+                    and interpret it for the modern mind. We make the most basic practices accessible to
+                    everyone.</p>
+                <p>We are an impact-driven organization that thrives on creating meaningful change in the
+                    world. This is why we focus more heavily on children and their teachers – they are truly
+                    the future of our world.</p>
+            </div>
             <span class="iframe-close-button" id="close-iframe-modal">&times;</span>
             <iframe id="donation-iframe"></iframe>
         </div>
@@ -72,9 +109,9 @@
             try {
                 const response = await fetch(donationHTMLUrl);
                 const donationHTML = await response.text();
-
-                // Set the fetched content into the iframe's srcdoc attribute
-                donationIframe.srcdoc = donationHTML;
+                const description = document.querySelector(".description").innerHTML;
+                const htmlWithDescription = donationHTML.replace('<!-- REPLACE_ME -->', description);
+                donationIframe.srcdoc = htmlWithDescription;
                 iframeModal.style.display = "flex";
             } catch (error) {
                 donationIframe.srcdoc = "<p>Failed to load the donation form. Please try again later.</p>";
@@ -89,11 +126,9 @@
             iframeModal.style.display = "none";
         });
 
-        // Close the iframe modal when clicking outside of the modal content
-        window.addEventListener("click", (event) => {
-            if (event.target === iframeModal) {
-                iframeModal.style.display = "none";
-            }
+        // Adjust iframe height after it loads
+        donationIframe.addEventListener("load", () => {
+            donationIframe.style.height = donationIframe.contentWindow.document.body.scrollHeight + "px";
         });
     </script>
 </body>
