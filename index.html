@@ -5,15 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Another Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@main/donation.css">
 </head>
 
 <body>
     <h1>Welcome to Our Donation Page</h1>
-    <iframe id="donation-iframe" style="border:none;width:100%;height:500px;"></iframe>
+    <button id="open-donation-iframe" class="donate-button">Donate Crypto</button>
+
+    <!-- Donation Iframe -->
+    <iframe id="donation-iframe" style="display:none;border:none;width:100%;height:500px;"></iframe>
 
     <script>
         const donationHTMLUrl = "https://cdn.jsdelivr.net/gh/contentment-org/crypto-donations@main/donation.html";
         const donationIframe = document.getElementById("donation-iframe");
+        const openDonationIframeButton = document.getElementById("open-donation-iframe");
 
         async function loadDonationIframe() {
             try {
@@ -22,13 +27,14 @@
 
                 // Set the fetched content into the iframe's srcdoc attribute
                 donationIframe.srcdoc = donationHTML;
+                donationIframe.style.display = "block";
             } catch (error) {
                 donationIframe.srcdoc = "<p>Failed to load the donation form. Please try again later.</p>";
                 console.error("Error loading donation form:", error);
             }
         }
 
-        loadDonationIframe();
+        openDonationIframeButton.addEventListener("click", loadDonationIframe);
     </script>
 </body>
 
