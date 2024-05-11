@@ -1,24 +1,13 @@
 (function () {
-  // Load the external CSS and JavaScript files
-  function loadExternalFiles() {
+  function loadCSS() {
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = "donation.css";
     document.head.appendChild(link);
-
-    const web3Script = document.createElement("script");
-    web3Script.src =
-      "https://cdnjs.cloudflare.com/ajax/libs/web3/4.8.0/web3.min.js";
-    web3Script.onload = () => {
-      const donationScript = document.createElement("script");
-      donationScript.src = "donation.js";
-      document.head.appendChild(donationScript);
-    };
-    document.head.appendChild(web3Script);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    loadExternalFiles();
+    loadCSS();
 
     const modalHtml = `
       <div class="iframe-modal" id="iframe-modal">
@@ -34,7 +23,6 @@
     document.body.insertAdjacentHTML("beforeend", buttonHtml);
 
     const iframeModal = document.getElementById("iframe-modal");
-    const donationIframe = document.getElementById("donation-iframe");
     const openDonationIframeButton = document.getElementById(
       "open-donation-iframe"
     );
@@ -50,11 +38,8 @@
     });
 
     window.addEventListener("message", (event) => {
-      if (
-        iframeModal.style.display !== "none" &&
-        event.data &&
-        event.data.type === "donation-iframe-dimensions"
-      ) {
+      if (event.data && event.data.type === "donation-iframe-dimensions") {
+        const donationIframe = document.getElementById("donation-iframe");
         donationIframe.style.height = `${event.data.height}px`;
         donationIframe.style.width = `${event.data.width}px`;
       }

@@ -308,79 +308,69 @@ document.addEventListener("DOMContentLoaded", () => {
   const erc20Fields = document.querySelectorAll(".erc20-field");
   const donationStatus = document.getElementById("donation-status");
 
-  // Show/hide ERC20 fields based on the selected donation type
   donationTypeSelect.addEventListener("change", () => {
     const donationType = donationTypeSelect.value;
     erc20Fields.forEach((field) => {
       field.style.display = donationType === "ERC20" ? "block" : "none";
     });
-    updateIframeDimensions(); // Adjust the height when fields change visibility
+    updateIframeDimensions();
   });
 
   donationForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     donationStatus.textContent = "Processing...";
-    updateIframeDimensions(); // Adjust the height after status text changes
+    updateIframeDimensions();
 
     const donationType = donationTypeSelect.value;
     const email = document.getElementById("donor-email").value;
     const amount = parseFloat(document.getElementById("amount").value);
 
-    // Accounts now exposed, can start your web3 interactions
-    const web3 = window.web3;
-
-    if (web3) {
-      // Request account access
+    if (window.ethereum) {
       try {
-        const accounts = await web3.eth.getAccounts();
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
         const account = accounts[0];
-
+        const web3 = new Web3(window.ethereum);
         const donationContract = new web3.eth.Contract(
           DonationABI,
           DonationAddress
         );
+
         const message = web3.utils.soliditySha3(
           { type: "string", value: email },
           { type: "address", value: account }
         );
         const signature = await web3.eth.personal.sign(message, account);
 
-        try {
-          if (donationType === "ETH") {
-            const donationValue = web3.utils.toWei(amount.toString(), "ether");
-            await donationContract.methods
-              .donateETH(email, signature)
-              .send({ from: account, value: donationValue });
-          } else if (donationType === "ERC20") {
-            const tokenAddress = document.getElementById("token-address").value;
-            const erc20Token = new web3.eth.Contract(ERC20ABI, tokenAddress);
-            const donationValue = web3.utils.toWei(amount.toString(), "ether");
-
-            await erc20Token.methods
-              .approve(DonationAddress, donationValue)
-              .send({ from: account });
-            await donationContract.methods
-              .donateERC20(tokenAddress, donationValue, email, signature)
-              .send({ from: account });
-          }
-          donationStatus.textContent = "Donation successful! Thank you!";
-        } catch (error) {
-          donationStatus.textContent = `Donation failed: ${error.message}`;
+        if (donationType === "ETH") {
+          const donationValue = web3.utils.toWei(amount.toString(), "ether");
+          await donationContract.methods
+            .donateETH(email, signature)
+            .send({ from: account, value: donationValue });
+        } else if (donationType === "ERC20") {
+          const tokenAddress = document.getElementById("token-address").value;
+          const erc20Token = new web3.eth.Contract(ERC20ABI, tokenAddress);
+          const donationValue = web3.utils.toWei(amount.toString(), "ether");
+          await erc20Token.methods
+            .approve(DonationAddress, donationValue)
+            .send({ from: account });
+          await donationContract.methods
+            .donateERC20(tokenAddress, donationValue, email, signature)
+            .send({ from: account });
         }
+        donationStatus.textContent = "Donation successful! Thank you!";
       } catch (error) {
-        console.error("Error requesting accounts:", error);
-        donationStatus.textContent = "Please connect your wallet to donate.";
+        console.error("Donation failed:", error);
+        donationStatus.textContent = "Donation failed. Please try again.";
       }
     } else {
-      console.error("Web3 provider not found. Please install MetaMask.");
+      console.error("Ethereum provider not found. Please install MetaMask.");
       donationStatus.textContent =
-        "Web3 provider not found. Please install MetaMask.";
+        "Ethereum provider not found. Please install MetaMask.";
     }
-
-    updateIframeDimensions(); // Adjust the height after status message changes
   });
 
-  // Send the height of the donation container to the parent window
   const updateIframeDimensions = () => {
     window.parent.postMessage(
       {
@@ -392,7 +382,6 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   };
 
-  // Observe changes in the donation container using ResizeObserver
   const donationContainer = document.querySelector(".donation-container");
   if (donationContainer) {
     const observer = new ResizeObserver(updateIframeDimensions);
