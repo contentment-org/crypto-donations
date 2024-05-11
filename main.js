@@ -1,3 +1,305 @@
+/* Donation contract address */
+const DonationAddress = "0xbA77E08c914df0CBA67eB0A7D96F82B1E4ae71aF";
+/* Donation contract ABI JSON array */
+const DonationABI = [
+  {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "email",
+        type: "string",
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
+      },
+    ],
+    name: "donateERC20",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "email",
+        type: "string",
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
+      },
+    ],
+    name: "donateETH",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "withdrawERC20",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "withdrawETH",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    stateMutability: "payable",
+    type: "receive",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "erc20Donations",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalEthDonated",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "donor",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "email",
+        type: "string",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "ERC20Donation",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "admin",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "ERC20Withdrawal",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "donor",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "email",
+        type: "string",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "EthDonation",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "admin",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "Withdrawal",
+    type: "event",
+  },
+];
+/* ERC20 token contract ABI JSON array */
+const ERC20ABI = [
+  {
+    constant: true,
+    inputs: [{ name: "_owner", type: "address" }],
+    name: "balanceOf",
+    outputs: [{ name: "balance", type: "uint256" }],
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "decimals",
+    outputs: [{ name: "", type: "uint8" }],
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "name",
+    outputs: [{ name: "", type: "string" }],
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "symbol",
+    outputs: [{ name: "", type: "string" }],
+    type: "function",
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "_spender", type: "address" },
+      { name: "_value", type: "uint256" },
+    ],
+    name: "approve",
+    outputs: [{ name: "success", type: "bool" }],
+    type: "function",
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "_from", type: "address" },
+      { name: "_to", type: "address" },
+      { name: "_value", type: "uint256" },
+    ],
+    name: "transferFrom",
+    outputs: [{ name: "success", type: "bool" }],
+    type: "function",
+  },
+];
+
 (function () {
   function loadCSS() {
     const link = document.createElement("link");
@@ -6,9 +308,15 @@
     document.head.appendChild(link);
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    loadCSS();
+  function loadWeb3(callback) {
+    const web3Script = document.createElement("script");
+    web3Script.src =
+      "https://cdnjs.cloudflare.com/ajax/libs/web3/4.8.0/web3.min.js";
+    web3Script.onload = callback;
+    document.head.appendChild(web3Script);
+  }
 
+  function initApp() {
     const modalHtml = `
       <div class="iframe-modal" id="iframe-modal">
         <div class="iframe-content">
@@ -53,7 +361,18 @@
           break;
       }
     });
-  });
+  }
+
+  function sendStatusToIframe(message) {
+    const donationIframe = document.getElementById("donation-iframe");
+    donationIframe.contentWindow.postMessage(
+      {
+        type: "updateStatus",
+        message: message,
+      },
+      "*"
+    );
+  }
 
   async function handleDonation({ donationType, email, amount, tokenAddress }) {
     console.log(
@@ -64,8 +383,14 @@
       tokenAddress
     );
 
+    if (typeof Web3 === "undefined") {
+      sendStatusToIframe("Web3 is not loaded.");
+      return;
+    }
+
+    const web3 = new Web3(window.ethereum);
+
     if (!window.ethereum) {
-      console.error("Ethereum provider not found. Please install MetaMask.");
       sendStatusToIframe(
         "Ethereum provider not found. Please install MetaMask."
       );
@@ -73,11 +398,9 @@
     }
 
     try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      const account = accounts[0]; // Using the first account
-      const web3 = new Web3(window.ethereum);
+      await window.ethereum.enable();
+      const accounts = await web3.eth.getAccounts();
+      const account = accounts[0];
       const donationContract = new web3.eth.Contract(
         DonationABI,
         DonationAddress
@@ -100,7 +423,7 @@
         sendStatusToIframe("ETH Donation successful! Thank you!");
       } else if (donationType === "ERC20") {
         const erc20Token = new web3.eth.Contract(ERC20ABI, tokenAddress);
-        const tokenAmount = web3.utils.toWei(amount.toString(), "ether"); // Assuming the token uses 18 decimals
+        const tokenAmount = web3.utils.toWei(amount.toString(), "ether");
         await erc20Token.methods
           .approve(DonationAddress, tokenAmount)
           .send({ from: account });
@@ -116,14 +439,8 @@
     }
   }
 
-  function sendStatusToIframe(message) {
-    const donationIframe = document.getElementById("donation-iframe");
-    donationIframe.contentWindow.postMessage(
-      {
-        type: "updateStatus",
-        message: message,
-      },
-      "*"
-    );
-  }
+  document.addEventListener("DOMContentLoaded", () => {
+    loadCSS();
+    loadWeb3(initApp);
+  });
 })();
