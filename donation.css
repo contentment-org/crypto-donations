@@ -80,9 +80,12 @@ body.iframe-body {
   width: 300px;
 }
 
-.donation-container h1 {
+/* .donation-container h1 {
   margin-bottom: 20px;
-}
+  font-size: 16px;
+  font-weight: lighter;
+  color: #cdcdcd;
+} */
 
 form {
   display: flex;
@@ -117,4 +120,32 @@ button:hover {
 
 .erc20-field {
   display: none;
+}
+
+#logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+  max-height: 100%;
+  margin-bottom: 10px;
+}
+#logo a {
+  color: #000;
+  font-family: "Open Sans", sans-serif;
+  font-size: 36px;
+  width: 100%;
+}
+#logo a .logo-default {
+  display: flex;
+  max-height: 52px;
+}
+#logo img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  transition: height 0.4s ease, padding 0.4s ease, margin 0.4s ease,
+    opacity 0.3s ease;
 }
