@@ -398,9 +398,11 @@ const ERC20ABI = [
     }
 
     try {
-      await window.ethereum.enable();
-      const accounts = await web3.eth.getAccounts();
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
       const account = accounts[0];
+
       const donationContract = new web3.eth.Contract(
         DonationABI,
         DonationAddress
