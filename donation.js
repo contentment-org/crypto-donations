@@ -1,3 +1,5 @@
+/* Donation contract address */
+const DonationAddress = "0xbA77E08c914df0CBA67eB0A7D96F82B1E4ae71aF";
 /* Donation contract ABI JSON array */
 const DonationABI = [
   {
@@ -245,10 +247,6 @@ const DonationABI = [
     type: "event",
   },
 ];
-
-/* Donation contract address */
-const DonationAddress = "0xbA77E08c914df0CBA67eB0A7D96F82B1E4ae71aF";
-
 /* ERC20 token contract ABI JSON array */
 const ERC20ABI = [
   {
@@ -303,88 +301,67 @@ const ERC20ABI = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
-  const donationForm = document.getElementById("donation-form");
-  const donationTypeSelect = document.getElementById("donation-type");
-  const erc20Fields = document.querySelectorAll(".erc20-field");
   const donationStatus = document.getElementById("donation-status");
 
-  donationTypeSelect.addEventListener("change", () => {
-    const donationType = donationTypeSelect.value;
-    erc20Fields.forEach((field) => {
-      field.style.display = donationType === "ERC20" ? "block" : "none";
-    });
-    updateIframeDimensions();
-  });
-
-  donationForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    donationStatus.textContent = "Processing...";
-    updateIframeDimensions();
-
-    const donationType = donationTypeSelect.value;
-    const email = document.getElementById("donor-email").value;
-    const amount = parseFloat(document.getElementById("amount").value);
-
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        const account = accounts[0];
-        const web3 = new Web3(window.ethereum);
-        const donationContract = new web3.eth.Contract(
-          DonationABI,
-          DonationAddress
-        );
-
-        const message = web3.utils.soliditySha3(
-          { type: "string", value: email },
-          { type: "address", value: account }
-        );
-        const signature = await web3.eth.personal.sign(message, account);
-
-        if (donationType === "ETH") {
-          const donationValue = web3.utils.toWei(amount.toString(), "ether");
-          await donationContract.methods
-            .donateETH(email, signature)
-            .send({ from: account, value: donationValue });
-        } else if (donationType === "ERC20") {
-          const tokenAddress = document.getElementById("token-address").value;
-          const erc20Token = new web3.eth.Contract(ERC20ABI, tokenAddress);
-          const donationValue = web3.utils.toWei(amount.toString(), "ether");
-          await erc20Token.methods
-            .approve(DonationAddress, donationValue)
-            .send({ from: account });
-          await donationContract.methods
-            .donateERC20(tokenAddress, donationValue, email, signature)
-            .send({ from: account });
-        }
-        donationStatus.textContent = "Donation successful! Thank you!";
-      } catch (error) {
-        console.error("Donation failed:", error);
-        donationStatus.textContent = "Donation failed. Please try again.";
-      }
-    } else {
-      console.error("Ethereum provider not found. Please install MetaMask.");
-      donationStatus.textContent =
-        "Ethereum provider not found. Please install MetaMask.";
+  window.addEventListener("message", (event) => {
+    if (event.data.type === "updateStatus") {
+      donationStatus.textContent = event.data.message;
     }
   });
 
-  const updateIframeDimensions = () => {
+  const donationForm = document.getElementById("donation-form");
+  const donationTypeSelect = document.getElementById("donation-type");
+  const erc20Fields = document.querySelectorAll(".erc20-field");
+
+  donationTypeSelect.addEventListener("change", () => {
+    erc20Fields.forEach((field) => {
+      field.style.display =
+        donationTypeSelect.value === "ERC20" ? "block" : "none";
+    });
+    sendMessageToUpdateDimensions();
+  });
+
+  donationForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const donationType = donationTypeSelect.value;
+    const email = document.getElementById("donor-email").value;
+    const amount = parseFloat(document.getElementById("amount").value);
+    const tokenAddress =
+      donationType === "ERC20"
+        ? document.getElementById("token-address").value
+        : null;
+
     window.parent.postMessage(
       {
-        type: "donation-iframe-dimensions",
-        height: document.body.offsetHeight,
-        width: document.body.offsetWidth,
+        type: "submitDonation",
+        data: {
+          donationType,
+          email,
+          amount,
+          tokenAddress,
+        },
       },
       "*"
     );
-  };
+  });
+
+  function sendMessageToUpdateDimensions() {
+    const dimensions = {
+      height: document.body.scrollHeight,
+      width: document.body.scrollWidth,
+    };
+    window.parent.postMessage(
+      {
+        type: "updateIframeDimensions",
+        dimensions: dimensions,
+      },
+      "*"
+    );
+  }
 
   const donationContainer = document.querySelector(".donation-container");
   if (donationContainer) {
-    const observer = new ResizeObserver(updateIframeDimensions);
+    const observer = new ResizeObserver(sendMessageToUpdateDimensions);
     observer.observe(donationContainer);
   }
 });
