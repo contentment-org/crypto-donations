@@ -656,10 +656,11 @@ const ERC20ABI = [
         DonationAddress
       );
 
+      const message = `${email}:${account}`;
+      const signature = await web3.eth.personal.sign(message, account, "");
+
       if (donationType === "ETH") {
         const amountInWei = web3.utils.toWei(amount.toString(), "ether");
-        const message = `${email}:${account}`;
-        const signature = await web3.eth.personal.sign(message, account);
 
         // Estimate gas
         const estimatedGas = await donationContract.methods
@@ -690,8 +691,6 @@ const ERC20ABI = [
         const approveGas = await erc20Token.methods
           .approve(DonationAddress, tokensToDonate)
           .estimateGas({ from: account });
-
-        const signature = await web3.eth.personal.sign(message, account);
 
         await erc20Token.methods
           .approve(DonationAddress, tokensToDonate)
