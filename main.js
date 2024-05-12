@@ -1,5 +1,5 @@
 /* Donation contract address */
-const DonationAddress = "0xbA77E08c914df0CBA67eB0A7D96F82B1E4ae71aF";
+const DonationAddress = "0xb056C24eC224250F14dA1d3ACD2c6b5970938782";
 /* Donation contract ABI JSON array */
 const DonationABI = [
   {
@@ -30,6 +30,52 @@ const DonationABI = [
     type: "error",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "email",
+        type: "string",
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
+      },
+    ],
+    name: "donateERC20",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "email",
+        type: "string",
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
+      },
+    ],
+    name: "donateETH",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "FailedInnerCall",
     type: "error",
@@ -55,6 +101,13 @@ const DonationABI = [
     ],
     name: "OwnableUnauthorizedAccount",
     type: "error",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
@@ -168,6 +221,19 @@ const DonationABI = [
     type: "event",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -185,117 +251,6 @@ const DonationABI = [
     ],
     name: "Withdrawal",
     type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "email",
-        type: "string",
-      },
-      {
-        internalType: "bytes",
-        name: "signature",
-        type: "bytes",
-      },
-    ],
-    name: "donateERC20",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "email",
-        type: "string",
-      },
-      {
-        internalType: "bytes",
-        name: "signature",
-        type: "bytes",
-      },
-    ],
-    name: "donateETH",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "erc20Donations",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "owner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalEthDonated",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     inputs: [
@@ -331,6 +286,51 @@ const DonationABI = [
   {
     stateMutability: "payable",
     type: "receive",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "erc20Donations",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalEthDonated",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
 ];
 /* ERC20 token contract ABI JSON array */
@@ -656,14 +656,23 @@ const ERC20ABI = [
         DonationAddress
       );
 
-      const amountInWei = web3.utils.toWei(amount.toString(), "ether");
-      const message = `${email}:${amountInWei}`; // Construct a message
-      const signature = await web3.eth.personal.sign(message, account, ""); // third parameter, password, is not required, even though it is listed as mandatory
-
       if (donationType === "ETH") {
+        const amountInWei = web3.utils.toWei(amount.toString(), "ether");
+        const message = `${email}:${account}`;
+        const signature = await web3.eth.personal.sign(message, account);
+
+        // Estimate gas
+        const estimatedGas = await donationContract.methods
+          .donateETH(email, signature)
+          .estimateGas({
+            from: account,
+            value: amountInWei,
+          });
+
         await donationContract.methods.donateETH(email, signature).send({
           from: account,
           value: amountInWei,
+          gas: estimatedGas,
         });
         console.log("ETH Donation successful!");
         sendStatusToIframe("ETH Donation successful! Thank you!");
@@ -672,13 +681,42 @@ const ERC20ABI = [
           sendStatusToIframe("Missing token address for ERC20 donation.");
           return;
         }
+
         const erc20Token = new web3.eth.Contract(ERC20ABI, tokenAddress);
+        const decimals = await erc20Token.methods.decimals().call();
+        const tokensToDonate = BigInt(amount) * BigInt(10) ** BigInt(decimals); // Adjust for token decimals
+
+        // First, estimate gas for the approve transaction
+        const approveGas = await erc20Token.methods
+          .approve(DonationAddress, tokensToDonate.toString())
+          .estimateGas({ from: account });
         await erc20Token.methods
-          .approve(DonationAddress, amountInWei)
-          .send({ from: account });
+          .approve(DonationAddress, tokensToDonate.toString())
+          .send({ from: account, gas: approveGas });
+
+        // Estimate gas for the donation transaction
+        const donateGas = await donationContract.methods
+          .donateERC20(
+            tokenAddress,
+            tokensToDonate.toString(),
+            email,
+            signature
+          )
+          .estimateGas({
+            from: account,
+          });
+
         await donationContract.methods
-          .donateERC20(tokenAddress, amountInWei, email, signature)
-          .send({ from: account });
+          .donateERC20(
+            tokenAddress,
+            tokensToDonate.toString(),
+            email,
+            signature
+          )
+          .send({
+            from: account,
+            gas: donateGas,
+          });
         console.log("ERC20 Donation successful!");
         sendStatusToIframe("ERC20 Donation successful! Thank you!");
       }
