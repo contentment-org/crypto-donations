@@ -1,5 +1,5 @@
 /* Donation contract address */
-const DonationAddress = "0xb056C24eC224250F14dA1d3ACD2c6b5970938782";
+const DonationAddress = "0x3f6D9ad60B78A676b215E5e9aE9D46C144aE170c";
 /* Donation contract ABI JSON array */
 const DonationABI = [
   {
@@ -688,31 +688,21 @@ const ERC20ABI = [
 
         // First, estimate gas for the approve transaction
         const approveGas = await erc20Token.methods
-          .approve(DonationAddress, tokensToDonate.toString())
+          .approve(DonationAddress, tokensToDonate)
           .estimateGas({ from: account });
         await erc20Token.methods
-          .approve(DonationAddress, tokensToDonate.toString())
+          .approve(DonationAddress, tokensToDonate)
           .send({ from: account, gas: approveGas });
 
         // Estimate gas for the donation transaction
         const donateGas = await donationContract.methods
-          .donateERC20(
-            tokenAddress,
-            tokensToDonate.toString(),
-            email,
-            signature
-          )
+          .donateERC20(tokenAddress, tokensToDonate, email, signature)
           .estimateGas({
             from: account,
           });
 
         await donationContract.methods
-          .donateERC20(
-            tokenAddress,
-            tokensToDonate.toString(),
-            email,
-            signature
-          )
+          .donateERC20(tokenAddress, tokensToDonate, email, signature)
           .send({
             from: account,
             gas: donateGas,
