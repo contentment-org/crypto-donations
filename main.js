@@ -1,5 +1,5 @@
 /* Donation contract address */
-const DonationAddress = "0x2CFA00116E473969973B8d799115D24E1f2C561A";
+const DonationAddress = "0x6df65f841A02B622932b8FD6adE3d5D8840Fd7dB";
 /* Donation contract ABI JSON array */
 const DonationABI = [
   {
@@ -257,6 +257,70 @@ const DonationABI = [
       },
     ],
     name: "erc20Donations",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "erc20Tokens",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+    ],
+    name: "getErc20Balance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getErc20Tokens",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getEthBalance",
     outputs: [
       {
         internalType: "uint256",
