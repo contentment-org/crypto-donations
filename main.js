@@ -613,7 +613,7 @@ const ERC20ABI = [
       <div class="iframe-modal" id="iframe-modal">
         <div class="iframe-content">
           <span class="iframe-close-button" id="close-iframe-modal">&times;</span>
-          <iframe id="donation-iframe" src="donation.html" sandbox="allow-scripts allow-forms"></iframe>
+          <iframe id="donation-iframe" src="donation.html" sandbox="allow-scripts allow-forms allow-top-navigation"></iframe>
         </div>
       </div>
     `;
