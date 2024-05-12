@@ -1,15 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const donationStatus = document.getElementById("donation-status");
-
-  window.addEventListener("message", (event) => {
-    if (event.data.type === "updateStatus") {
-      donationStatus.textContent = event.data.message;
-    }
-  });
-
   const donationForm = document.getElementById("donation-form");
   const donationTypeSelect = document.getElementById("donation-type");
   const erc20Fields = document.querySelectorAll(".erc20-field");
+  const accountSelect = document.getElementById("account-list");
+  const donationStatus = document.getElementById("donation-status");
+
+  window.addEventListener("message", (event) => {
+    const { type } = event.data;
+    switch (type) {
+      case "updateStatus":
+        donationStatus.textContent = event.data.message;
+        break;
+      case "updateAccounts":
+        updateAccountList(event.data.accounts);
+        break;
+    }
+  });
 
   donationTypeSelect.addEventListener("change", () => {
     erc20Fields.forEach((field) => {
@@ -28,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
       donationType === "ERC20"
         ? document.getElementById("token-address").value
         : null;
+    const selectedAccount = accountSelect.value; // Retrieve the selected account
 
     window.parent.postMessage(
       {
@@ -37,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
           email,
           amount,
           tokenAddress,
+          account: selectedAccount,
         },
       },
       "*"
@@ -55,6 +63,16 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       "*"
     );
+  }
+
+  function updateAccountList(accounts) {
+    const accountSelect = document.getElementById("account-list");
+    accounts.forEach((account) => {
+      const option = document.createElement("option");
+      option.value = account;
+      option.textContent = account;
+      accountSelect.appendChild(option);
+    });
   }
 
   const donationContainer = document.querySelector(".donation-container");
