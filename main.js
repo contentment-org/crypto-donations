@@ -1,5 +1,5 @@
 /* Donation contract address */
-const DonationAddress = "0x79c0aEf49Cc41150f77BfB00e2536B4D6ca84C35";
+const DonationAddress = "0xf7520BDd12A4346BA3f20d4b4c10B269fBa4C501";
 /* Donation contract ABI JSON array */
 const DonationABI = [
   {
@@ -672,7 +672,10 @@ const ERC20ABI = [
         DonationAddress
       );
 
+      // Create the message in the format expected by the smart contract
       const message = `${email}:${account}`;
+
+      // Sign the message
       const signature = await web3.eth.personal.sign(message, account, "");
 
       if (donationType === "ETH") {
