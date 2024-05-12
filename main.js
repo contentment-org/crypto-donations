@@ -1,5 +1,5 @@
 /* Donation contract address */
-const DonationAddress = "0xf7520BDd12A4346BA3f20d4b4c10B269fBa4C501";
+const DonationAddress = "0x2CFA00116E473969973B8d799115D24E1f2C561A";
 /* Donation contract ABI JSON array */
 const DonationABI = [
   {
@@ -647,6 +647,13 @@ const ERC20ABI = [
     );
   }
 
+  async function signMessage(web3, account, email) {
+    const message = `${email}:${account}`;
+    const hash = web3.utils.sha3(message);
+    const signature = await web3.eth.personal.sign(hash, account, "");
+    return signature;
+  }
+
   async function handleDonation({ donationType, email, amount, tokenAddress }) {
     if (typeof Web3 === "undefined") {
       sendStatusToIframe("Web3 is not loaded.");
@@ -672,11 +679,7 @@ const ERC20ABI = [
         DonationAddress
       );
 
-      // Create the message in the format expected by the smart contract
-      const message = `${email}:${account}`;
-
-      // Sign the message
-      const signature = await web3.eth.personal.sign(message, account, "");
+      const signature = await signMessage(web3, account, email);
 
       if (donationType === "ETH") {
         const amountInWei = web3.utils.toWei(amount.toString(), "ether");
