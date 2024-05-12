@@ -388,14 +388,14 @@ const ERC20ABI = [
       return;
     }
 
-    const web3 = new Web3(window.ethereum);
-
     if (!window.ethereum) {
       sendStatusToIframe(
         "Ethereum provider not found. Please install MetaMask."
       );
       return;
     }
+
+    const web3 = new Web3(window.ethereum);
 
     try {
       const accounts = await window.ethereum.request({
@@ -408,29 +408,38 @@ const ERC20ABI = [
         DonationAddress
       );
 
-      // Create a unique message to sign
+      // Verify that all needed information is provided
+      if (!email || !amount) {
+        sendStatusToIframe("Missing email or amount.");
+        return;
+      }
+
+      // Convert amount to the correct format and create a unique message to sign
+      const amountToSend = web3.utils.toWei(amount.toString(), "ether");
       const message = web3.utils.soliditySha3(
         { type: "string", value: email },
-        { type: "uint256", value: amount }
+        { type: "uint256", value: amountToSend }
       );
       const signature = await web3.eth.personal.sign(message, account);
 
       if (donationType === "ETH") {
-        const donationValue = web3.utils.toWei(amount.toString(), "ether");
         await donationContract.methods.donateETH(email, signature).send({
           from: account,
-          value: donationValue,
+          value: amountToSend,
         });
         console.log("ETH Donation successful!");
         sendStatusToIframe("ETH Donation successful! Thank you!");
       } else if (donationType === "ERC20") {
+        if (!tokenAddress) {
+          sendStatusToIframe("Missing token address for ERC20 donation.");
+          return;
+        }
         const erc20Token = new web3.eth.Contract(ERC20ABI, tokenAddress);
-        const tokenAmount = web3.utils.toWei(amount.toString(), "ether");
         await erc20Token.methods
-          .approve(DonationAddress, tokenAmount)
+          .approve(DonationAddress, amountToSend)
           .send({ from: account });
         await donationContract.methods
-          .donateERC20(tokenAddress, tokenAmount, email, signature)
+          .donateERC20(tokenAddress, amountToSend, email, signature)
           .send({ from: account });
         console.log("ERC20 Donation successful!");
         sendStatusToIframe("ERC20 Donation successful! Thank you!");
