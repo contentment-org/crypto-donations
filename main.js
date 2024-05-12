@@ -1,5 +1,5 @@
 /* Donation contract address */
-const DonationAddress = "0x6c6F71A845EF9D12abF2b0a777Fd0abf98AB0901";
+const DonationAddress = "0x79c0aEf49Cc41150f77BfB00e2536B4D6ca84C35";
 /* Donation contract ABI JSON array */
 const DonationABI = [
   {
@@ -30,52 +30,6 @@ const DonationABI = [
     type: "error",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "email",
-        type: "string",
-      },
-      {
-        internalType: "bytes",
-        name: "signature",
-        type: "bytes",
-      },
-    ],
-    name: "donateERC20",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "email",
-        type: "string",
-      },
-      {
-        internalType: "bytes",
-        name: "signature",
-        type: "bytes",
-      },
-    ],
-    name: "donateETH",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "FailedInnerCall",
     type: "error",
@@ -103,13 +57,6 @@ const DonationABI = [
     type: "error",
   },
   {
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [
       {
         internalType: "address",
@@ -118,6 +65,22 @@ const DonationABI = [
       },
     ],
     name: "SafeERC20FailedOperation",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "length",
+        type: "uint256",
+      },
+    ],
+    name: "StringsInsufficientHexLength",
     type: "error",
   },
   {
@@ -221,19 +184,6 @@ const DonationABI = [
     type: "event",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -264,8 +214,18 @@ const DonationABI = [
         name: "amount",
         type: "uint256",
       },
+      {
+        internalType: "string",
+        name: "email",
+        type: "string",
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
+      },
     ],
-    name: "withdrawERC20",
+    name: "donateERC20",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -273,19 +233,20 @@ const DonationABI = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
+        internalType: "string",
+        name: "email",
+        type: "string",
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
       },
     ],
-    name: "withdrawETH",
+    name: "donateETH",
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     stateMutability: "payable",
-    type: "receive",
+    type: "function",
   },
   {
     inputs: [
@@ -321,6 +282,13 @@ const DonationABI = [
   },
   {
     inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "totalEthDonated",
     outputs: [
       {
@@ -331,6 +299,54 @@ const DonationABI = [
     ],
     stateMutability: "view",
     type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "withdrawERC20",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "withdrawETH",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    stateMutability: "payable",
+    type: "receive",
   },
 ];
 /* ERC20 token contract ABI JSON array */
