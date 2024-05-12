@@ -690,6 +690,9 @@ const ERC20ABI = [
         const approveGas = await erc20Token.methods
           .approve(DonationAddress, tokensToDonate)
           .estimateGas({ from: account });
+
+        const signature = await web3.eth.personal.sign(message, account);
+
         await erc20Token.methods
           .approve(DonationAddress, tokensToDonate)
           .send({ from: account, gas: approveGas });
