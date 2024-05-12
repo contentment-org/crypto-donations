@@ -657,11 +657,8 @@ const ERC20ABI = [
       );
 
       const amountInWei = web3.utils.toWei(amount.toString(), "ether");
-      const messageHash = web3.utils.soliditySha3(
-        { type: "string", value: email },
-        { type: "uint256", value: amountInWei }
-      );
-      const signature = await web3.eth.personal.sign(messageHash, account);
+      const message = `${email}:${amountInWei}`; // Construct a message
+      const signature = await web3.eth.personal.sign(message, account, ""); // third parameter, password, is not required, even though it is listed as mandatory
 
       if (donationType === "ETH") {
         await donationContract.methods.donateETH(email, signature).send({
