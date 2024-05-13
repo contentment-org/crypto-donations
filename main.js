@@ -732,7 +732,13 @@ const ERC20ABI = [
     return signature;
   }
 
-  async function handleDonation({ donationType, email, amount, tokenAddress }) {
+  async function handleDonation({
+    donationType,
+    email,
+    amount,
+    tokenAddress,
+    account,
+  }) {
     if (typeof Web3 === "undefined") {
       sendStatusToIframe("Web3 is not loaded.");
       return;
@@ -748,15 +754,10 @@ const ERC20ABI = [
     const web3 = new Web3(window.ethereum);
 
     try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      const account = accounts[0];
       const donationContract = new web3.eth.Contract(
         DonationABI,
         DonationAddress
       );
-
       const signature = await signMessage(web3, account, email);
 
       if (donationType === "ETH") {
