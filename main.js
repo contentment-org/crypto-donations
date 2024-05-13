@@ -751,9 +751,8 @@ const ERC20ABI = [
       return;
     }
 
-    const web3 = new Web3(window.ethereum);
-
     try {
+      const web3 = new Web3(window.ethereum);
       const donationContract = new web3.eth.Contract(
         DonationABI,
         DonationAddress
