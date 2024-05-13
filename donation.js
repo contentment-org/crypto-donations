@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const erc20Fields = document.querySelectorAll(".erc20-field");
   const accountSelect = document.getElementById("account-list");
   const donationStatus = document.getElementById("donation-status");
+  const donarEmail = document.getElementById("donor-email");
+  const donationAmount = document.getElementById("amount");
+  const token = document.getElementById("token-address");
 
   function sendMessageToUpdateDimensions() {
     const dimensions = {
@@ -20,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateAccountList(accounts) {
-    const accountSelect = document.getElementById("account-list");
     accounts.forEach((account) => {
       const option = document.createElement("option");
       option.value = account;
@@ -40,12 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
   donationForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const donationType = donationTypeSelect.value;
-    const email = document.getElementById("donor-email").value;
-    const amount = parseFloat(document.getElementById("amount").value);
-    const tokenAddress =
-      donationType === "ERC20"
-        ? document.getElementById("token-address").value
-        : null;
+    const email = donarEmail.value;
+    const amount = parseFloat(donationAmount.value);
+    const tokenAddress = donationType === "ERC20" ? token.value : null;
     const selectedAccount = accountSelect.value; // Retrieve the selected account
 
     window.parent.postMessage(
