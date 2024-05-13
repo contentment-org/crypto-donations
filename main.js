@@ -653,25 +653,6 @@ const ERC20ABI = [
     document.head.appendChild(web3Script);
   }
 
-  async function fetchAccounts() {
-    if (!window.ethereum) {
-      sendStatusToIframe(
-        "Ethereum provider not found. Please install MetaMask."
-      );
-      return;
-    }
-
-    try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      sendAccountsToIframe(accounts);
-    } catch (error) {
-      console.error("Failed to fetch accounts:", error);
-      sendStatusToIframe(`Failed to fetch accounts: ${error.message}`);
-    }
-  }
-
   function initApp() {
     const modalHtml = `
       <div class="iframe-modal" id="iframe-modal">
@@ -725,22 +706,24 @@ const ERC20ABI = [
     );
   }
 
-  window.addEventListener("message", async (event) => {
-    const data = event.data;
-    if (!data) return;
-
-    switch (data.type) {
-      case "submitDonation":
-        handleDonation(data.data);
-        break;
-      case "updateIframeDimensions":
-        const { height, width } = data.dimensions;
-        const donationIframe = document.getElementById("donation-iframe");
-        donationIframe.style.height = `${height}px`;
-        donationIframe.style.width = `${width}px`;
-        break;
+  async function fetchAccounts() {
+    if (!window.ethereum) {
+      sendStatusToIframe(
+        "Ethereum provider not found. Please install MetaMask."
+      );
+      return;
     }
-  });
+
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      sendAccountsToIframe(accounts);
+    } catch (error) {
+      console.error("Failed to fetch accounts:", error);
+      sendStatusToIframe(`Failed to fetch accounts: ${error.message}`);
+    }
+  }
 
   async function signMessage(web3, account, email) {
     const message = `${email}:${account}`;
@@ -834,6 +817,23 @@ const ERC20ABI = [
       sendStatusToIframe(`Donation failed: ${error.message}`);
     }
   }
+
+  window.addEventListener("message", async (event) => {
+    const data = event.data;
+    if (!data) return;
+
+    switch (data.type) {
+      case "submitDonation":
+        handleDonation(data.data);
+        break;
+      case "updateIframeDimensions":
+        const { height, width } = data.dimensions;
+        const donationIframe = document.getElementById("donation-iframe");
+        donationIframe.style.height = `${height}px`;
+        donationIframe.style.width = `${width}px`;
+        break;
+    }
+  });
 
   document.addEventListener("DOMContentLoaded", () => {
     loadCSS();

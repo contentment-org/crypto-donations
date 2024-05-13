@@ -5,17 +5,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const accountSelect = document.getElementById("account-list");
   const donationStatus = document.getElementById("donation-status");
 
-  window.addEventListener("message", (event) => {
-    const { type } = event.data;
-    switch (type) {
-      case "updateStatus":
-        donationStatus.textContent = event.data.message;
-        break;
-      case "updateAccounts":
-        updateAccountList(event.data.accounts);
-        break;
-    }
-  });
+  function sendMessageToUpdateDimensions() {
+    const dimensions = {
+      height: document.body.scrollHeight,
+      width: document.body.scrollWidth,
+    };
+    window.parent.postMessage(
+      {
+        type: "updateIframeDimensions",
+        dimensions: dimensions,
+      },
+      "*"
+    );
+  }
+
+  function updateAccountList(accounts) {
+    const accountSelect = document.getElementById("account-list");
+    accounts.forEach((account) => {
+      const option = document.createElement("option");
+      option.value = account;
+      option.textContent = account;
+      accountSelect.appendChild(option);
+    });
+  }
 
   donationTypeSelect.addEventListener("change", () => {
     erc20Fields.forEach((field) => {
@@ -51,29 +63,17 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
 
-  function sendMessageToUpdateDimensions() {
-    const dimensions = {
-      height: document.body.scrollHeight,
-      width: document.body.scrollWidth,
-    };
-    window.parent.postMessage(
-      {
-        type: "updateIframeDimensions",
-        dimensions: dimensions,
-      },
-      "*"
-    );
-  }
-
-  function updateAccountList(accounts) {
-    const accountSelect = document.getElementById("account-list");
-    accounts.forEach((account) => {
-      const option = document.createElement("option");
-      option.value = account;
-      option.textContent = account;
-      accountSelect.appendChild(option);
-    });
-  }
+  window.addEventListener("message", (event) => {
+    const { type } = event.data;
+    switch (type) {
+      case "updateStatus":
+        donationStatus.textContent = event.data.message;
+        break;
+      case "updateAccounts":
+        updateAccountList(event.data.accounts);
+        break;
+    }
+  });
 
   const donationContainer = document.querySelector(".donation-container");
   if (donationContainer) {
