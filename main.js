@@ -1,5 +1,5 @@
 /* Donation contract address */
-const DonationAddress = "0x6df65f841A02B622932b8FD6adE3d5D8840Fd7dB";
+const DonationAddress = "0xD5F2f0b7868075a1616c7c78C2fcaD4E732b0bd5";
 /* Donation contract ABI JSON array */
 const DonationABI = [
   {
